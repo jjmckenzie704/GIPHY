@@ -19,30 +19,13 @@
 <body>
 
       <div class="container">
-
-          <button data-search="dog">Dog</button>
-          <button data-search="cat">Cat</button>
-          <button data-search="alligator">Alligator</button>
-          <button data-search="rabbit">Rabbit</button>
-          <button data-search="squirrel">Squirrel</button>
-          <button data-search="monkey">Monkey</button>
-          <button data-search="lion">Lion</button>
-          <button data-search="zebra">Zebra</button>
-          <button data-search="eagle">Eagle</button>
-          <button data-search="wolf">Wolf</button>
-          <button data-search="shark">Shark</button>
-          <button data-search="tiger">Tiger</button>
-          <button data-search="dolphin">Dolphin</button>
-          <button data-search="penguin">Penguin</button>
-          <button data-search="giraffe">Giraffe</button>
-        
             <div id="animals-view"></div>
             <div id="buttons-view"></div>
             <form id="animal-form">
                     <label for="animal-input">Add an animal</label>
                     <input type="text" id="animal-input"><br>
               
-                    <!-- Button triggers new movie to be added -->
+                    <!-- Button triggers new animal to be added -->
                     <input id="add-animal" type="submit" value="Add an animal">
                   </form>
     
@@ -51,14 +34,37 @@
 
         var animals = ["dog", "cat", "alligator", "rabbit", "squirrel", "monkey", "lion", "zebra", "eagle", "wolf", "shark", "tiger", "dolphin", "penguin", "giraffe"];
 
+      function renderButtons() {
+                $("#buttons-view").empty();
+
+                for (var i = 0; i < animals.length; i++){
+                  var a = $("<button>");
+                  a.addClass("animal");
+                  a.attr("data-search", animals[i]);
+                  a.text(animals[i]);
+                  $("#buttons-view").append(a);
+                }
+              }
+
+              $("#add-animal").on("click", function(event) {
+                event.preventDefault();
+                var animals = $("#animal-input").val().trim();
+                animals.push(animals);
+                renderButtons();
+              });
+
+              renderButtons();
+              
         $('button').on('click',function(){
-          var x = $(this).attr("data-search");
+          var x = $(this).attr("animal-name");
           var queryURL = "https://api.giphy.com/v1/gifs/search?q="+x+"&api_key=aDADOsgnANp1LHGUBJz2WCUTmPIEIlZk&limit=10";
+          
+
           $.ajax({
         url: queryURL,
         method: "GET"
       }).then(function(response) { 
-        console.log(response);
+        console.log(x);
         for (var i=0;i<response.data.length;i++){
           var animalsDiv = $('<div>');
           var p =$('<p>Rating: ' + response.data[i].rating + '</p>');
@@ -69,6 +75,15 @@
           $('#animals-view').prepend(animalsDiv);
 
         }
+        
+
+        $("#add-animal").on("click", function(event) {
+          event.preventDefault();
+          var animals = $("#animal-input").val().trim();
+          animals.push(animals);
+          renderButtons();
+        });
+
         
       });
         })
@@ -84,7 +99,17 @@
           $(this).attr("data-state", "still");
         }
       });
+      function renderButtons() {
+          $("#buttons-view").empty();
 
+          for (var i = 0; i < animals.length; i++){
+            var a = $("<button>");
+            a.addClass("animal");
+            a.attr("animal-name", animals[i]);
+            a.text(animals[i]);
+            $("#buttons-view").append(a);
+          }
+        }
         // (create onclick then function to make $AJAX to call queryURL)
         
         
