@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>GifTastic</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <style type="text/css">
+        button,
+        div,
+        form,
+        input {
+          margin: 8px;
+          color: cadetblue;
+        }
+      </style>
+</head>
+<body>
+
+      <div class="container">
+
+          <button data-search="dog">Dog</button>
+          <button data-search="cat">Cat</button>
+          <button data-search="alligator">Alligator</button>
+          <button data-search="rabbit">Rabbit</button>
+          <button data-search="squirrel">Squirrel</button>
+          <button data-search="monkey">Monkey</button>
+          <button data-search="lion">Lion</button>
+          <button data-search="zebra">Zebra</button>
+          <button data-search="eagle">Eagle</button>
+          <button data-search="wolf">Wolf</button>
+          <button data-search="shark">Shark</button>
+          <button data-search="tiger">Tiger</button>
+          <button data-search="dolphin">Dolphin</button>
+          <button data-search="penguin">Penguin</button>
+          <button data-search="giraffe">Giraffe</button>
+        
+            <div id="animals-view"></div>
+            <div id="buttons-view"></div>
+            <form id="animal-form">
+                    <label for="animal-input">Add an animal</label>
+                    <input type="text" id="animal-input"><br>
+              
+                    <!-- Button triggers new movie to be added -->
+                    <input id="add-animal" type="submit" value="Add an animal">
+                  </form>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript">
+
+        var animals = ["dog", "cat", "alligator", "rabbit", "squirrel", "monkey", "lion", "zebra", "eagle", "wolf", "shark", "tiger", "dolphin", "penguin", "giraffe"];
+
+        $('button').on('click',function(){
+          var x = $(this).attr("data-search");
+          var queryURL = "https://api.giphy.com/v1/gifs/search?q="+x+"&api_key=aDADOsgnANp1LHGUBJz2WCUTmPIEIlZk&limit=10";
+          $.ajax({
+        url: queryURL,
+        method: "GET"
+      }).then(function(response) { 
+        console.log(response);
+        for (var i=0;i<response.data.length;i++){
+          var animalsDiv = $('<div>');
+          var p =$('<p>Rating: ' + response.data[i].rating + '</p>');
+          var animalsImage = $('<img>');
+          animalsImage.attr('src',response.data[i].images.fixed_height.url);
+          animalsDiv.prepend(animalsImage);
+          animalsDiv.prepend(p);
+          $('#animals-view').prepend(animalsDiv);
+
+        }
+        
+      });
+        })
+        //Pausing of gifs//
+        $(".gif").on("click", function() {     
+          var state = $(this).attr("data-state");
+      
+          if (state === "still") {
+            $(this).attr("src", $(this).attr("data-animate"));
+            $(this).attr("data-state", "animate");
+          } else {
+          $(this).attr("src", $(this).attr("data-still"));
+          $(this).attr("data-state", "still");
+        }
+      });
+
+        // (create onclick then function to make $AJAX to call queryURL)
+        
+        
+  
+      
+    </script>    
+    </div>  
+</body>
+</html>
