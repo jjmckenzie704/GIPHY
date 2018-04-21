@@ -19,86 +19,24 @@
 <body>
 
       <div class="container">
-            <div id="animals-view"></div>
-            <div id="buttons-view"></div>
-            <form id="animal-form">
-                    <label for="animal-input">Add an animal</label>
-                    <input type="text" id="animal-input"><br>
-              
-                    <!-- Button triggers new animal to be added -->
-                    <input id="add-animal" type="submit" value="Add an animal">
-                  </form>
+        <div id="buttons-view"></div>   
+        <form id="animal-form">
+          <label for="animal-input">Add an animal</label>
+          <input type="text" id="animal-input"><br>
+    
+          <!-- Button triggers new animal to be added -->
+          <input id="add-animal" type="submit" value="Add an animal">
+        </form> 
+        <div id="animals-view"></div>
+
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script type="text/javascript">
 
         var animals = ["dog", "cat", "alligator", "rabbit", "squirrel", "monkey", "lion", "zebra", "eagle", "wolf", "shark", "tiger", "dolphin", "penguin", "giraffe"];
 
-      function renderButtons() {
-                $("#buttons-view").empty();
-
-                for (var i = 0; i < animals.length; i++){
-                  var a = $("<button>");
-                  a.addClass("animal");
-                  a.attr("data-search", animals[i]);
-                  a.text(animals[i]);
-                  $("#buttons-view").append(a);
-                }
-              }
-
-              $("#add-animal").on("click", function(event) {
-                event.preventDefault();
-                var animals = $("#animal-input").val().trim();
-                animals.push(animals);
-                renderButtons();
-              });
-
-              renderButtons();
-              
-        $('button').on('click',function(){
-          var x = $(this).attr("animal-name");
-          var queryURL = "https://api.giphy.com/v1/gifs/search?q="+x+"&api_key=aDADOsgnANp1LHGUBJz2WCUTmPIEIlZk&limit=10";
-          
-
-          $.ajax({
-        url: queryURL,
-        method: "GET"
-      }).then(function(response) { 
-        console.log(x);
-        for (var i=0;i<response.data.length;i++){
-          var animalsDiv = $('<div>');
-          var p =$('<p>Rating: ' + response.data[i].rating + '</p>');
-          var animalsImage = $('<img>');
-          animalsImage.attr('src',response.data[i].images.fixed_height.url);
-          animalsDiv.prepend(animalsImage);
-          animalsDiv.prepend(p);
-          $('#animals-view').prepend(animalsDiv);
-
-        }
         
 
-        $("#add-animal").on("click", function(event) {
-          event.preventDefault();
-          var animals = $("#animal-input").val().trim();
-          animals.push(animals);
-          renderButtons();
-        });
-
-        
-      });
-        })
-        //Pausing of gifs//
-        $(".gif").on("click", function() {     
-          var state = $(this).attr("data-state");
-      
-          if (state === "still") {
-            $(this).attr("src", $(this).attr("data-animate"));
-            $(this).attr("data-state", "animate");
-          } else {
-          $(this).attr("src", $(this).attr("data-still"));
-          $(this).attr("data-state", "still");
-        }
-      });
       function renderButtons() {
           $("#buttons-view").empty();
 
@@ -110,6 +48,58 @@
             $("#buttons-view").append(a);
           }
         }
+
+      renderButtons();
+
+      $("#add-animal").on("click", function(event) {
+        event.preventDefault();
+        var newAnimal = $("#animal-input").val().trim();
+        animals.push(newAnimal);
+        renderButtons();
+      });
+    
+      
+              
+        $('#buttons-view').on('click', 'button', function(){
+          $("#animals-view").empty();
+          var x = $(this).attr("animal-name");
+          var queryURL = "https://api.giphy.com/v1/gifs/search?q="+x+"&api_key=aDADOsgnANp1LHGUBJz2WCUTmPIEIlZk&limit=10";
+          
+
+          $.ajax({
+            url: queryURL,
+            method: "GET"
+          }).then(function(response) { 
+            console.log(x);
+            for (var i=0;i<response.data.length;i++){
+              var animalsDiv = $('<div>');
+              var p =$('<p>Rating: ' + response.data[i].rating + '</p>');
+              var animalsImage = $('<img>');
+
+              animalsImage.attr('src',response.data[i].images.fixed_height.url);
+              animalsImage.attr('class', 'gif');
+              animalsImage.attr('data-state', 'animate')
+              animalsDiv.prepend(animalsImage);
+              animalsDiv.prepend(p);
+              $('#animals-view').prepend(animalsDiv);
+
+            }             
+          });
+        });
+        
+        //Pausing of gifs//
+        $("#animals-view").on("click", 'button', function() {     
+          var state = $(this).attr("data-state");
+      
+          if (state === "still") {
+            $(this).attr("src", $(this).attr("data-animate"));
+            $(this).attr("data-state", "animate");
+          } else {
+          $(this).attr("src", $(this).attr("data-still"));
+          $(this).attr("data-state", "still");
+        }
+      });
+      
         // (create onclick then function to make $AJAX to call queryURL)
         
         
