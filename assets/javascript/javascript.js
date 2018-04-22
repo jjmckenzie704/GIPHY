@@ -42,11 +42,11 @@ $(document).ready(function() {
               var animalsDiv = $('<div>');
               var p =$('<p>Rating: ' + response.data[i].rating + '</p>');
               var animalsImage = $('<img>');
-
-              animalsImage.attr('src',response.data[i].images.fixed_height.url);
+              animalsImage.attr('src', response.data[i].images.fixed_height_still.url);
               animalsImage.attr('class', 'gif');
-              animalsImage.attr('data-animate', 'animate')
-              animalsImage.attr('data-still', 'still')
+              animalsImage.attr('data-state', 'still');
+              animalsImage.attr('data-animate', response.data[i].images.fixed_height.url);
+              animalsImage.attr('data-still', response.data[i].images.fixed_height_still.url);
               animalsDiv.prepend(animalsImage);
               animalsDiv.prepend(p);
               $('#animals-view').prepend(animalsDiv);
@@ -56,14 +56,14 @@ $(document).ready(function() {
         });
         
         //Pausing of gifs//
-        $("#gif").on("click", 'button', function() {     
+        $("body").on("click", ".gif", function() {     
           var state = $(this).attr("data-state");      
-          if (state === "animate") {
-            $(this).attr("src", $(this).attr("data-still"));
-            $(this).attr("data-state", "still");
+          if (state === "still") {
+            $(this).attr("src", $(this).attr("data-animate"));
+            $(this).attr("data-state", "animate");
           } else {
-          $(this).attr("src", $(this).attr("data-animate"));
-          $(this).attr("data-state", "animate");
+          $(this).attr("src", $(this).attr("data-still"));
+          $(this).attr("data-state", "still");
         }
       });
       
